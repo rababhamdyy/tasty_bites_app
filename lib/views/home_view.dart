@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tasty_bites_app/widgets/reciepe_widget.dart';
+import 'package:tasty_bites_app/widgets/recipe_widget.dart';
+import 'package:tasty_bites_app/models/recipe_model.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -16,7 +17,12 @@ class HomeView extends StatelessWidget {
         ),
       ),
 
-      body: ReciepeWidget(),
+      body: ListView.builder(
+        itemCount: getRecipes.length,
+        itemBuilder: (context, index) {
+          return RecipeWidget(reciepe: getRecipes[index]);
+        },
+      ),
     );
   }
 }

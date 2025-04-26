@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:tasty_bites_app/models/recipe_model.dart';
 
-class ReciepeWidget extends StatelessWidget {
-  const ReciepeWidget({super.key});
+class RecipeWidget extends StatelessWidget {
+  final Recipe reciepe;
+  const RecipeWidget({super.key, required this.reciepe});
+
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +19,7 @@ class ReciepeWidget extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Image.asset(
-                'assets/images/pizza.webp',
+                reciepe.imageUrl,
                 fit: BoxFit.cover,
                 width: double.infinity,
                 height: 250,
@@ -30,7 +33,7 @@ class ReciepeWidget extends StatelessWidget {
                 gradient: LinearGradient(
                   colors: [
                     Colors.black.withAlpha(50),
-                    Colors.black.withAlpha(150),
+                    Colors.black.withAlpha(180),
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -43,7 +46,7 @@ class ReciepeWidget extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.black.withAlpha(150),
+                  color: Colors.black.withAlpha(170),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Row(
@@ -51,7 +54,7 @@ class ReciepeWidget extends StatelessWidget {
                     Icon(Icons.star, color: Colors.yellow[400]),
                     SizedBox(width: 5),
                     Text(
-                      '4.6',
+                      reciepe.rating.toString(),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -69,7 +72,7 @@ class ReciepeWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Classic Margherita Pizza",
+                    reciepe.name,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -79,7 +82,7 @@ class ReciepeWidget extends StatelessWidget {
                   ),
                   SizedBox(height: 5),
                   Text(
-                    "6 Ingredients",
+                    "${reciepe.ingredientsCount} Ingredients",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -93,7 +96,7 @@ class ReciepeWidget extends StatelessWidget {
               right: 20,
               bottom: 20,
               child: Text(
-                "300 kcal",
+                "${reciepe.calories} kcal",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
