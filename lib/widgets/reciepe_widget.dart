@@ -39,7 +39,7 @@ class ReciepeWidget extends StatelessWidget {
             ),
             Positioned(
               top: 20,
-              left: 20,
+              right: 20,
               child: Container(
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
@@ -52,16 +52,15 @@ class ReciepeWidget extends StatelessWidget {
                     SizedBox(width: 5),
                     Text(
                       '4.6',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontFamily: 'Poppins',
+                      ),
                     ),
                   ],
                 ),
               ),
-            ),
-            Positioned(
-              top: 20,
-              right: 20,
-              child: Icon(Icons.more_vert, color: Colors.white),
             ),
             Positioned(
               bottom: 20,
@@ -75,6 +74,7 @@ class ReciepeWidget extends StatelessWidget {
                       color: Colors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
+                      fontFamily: 'Poppins',
                     ),
                   ),
                   SizedBox(height: 5),
@@ -83,9 +83,22 @@ class ReciepeWidget extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
+                      fontFamily: 'Poppins',
                     ),
                   ),
                 ],
+              ),
+            ),
+            Positioned(
+              right: 20,
+              bottom: 20,
+              child: Text(
+                "300 kcal",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontFamily: 'Poppins',
+                ),
               ),
             ),
           ],
