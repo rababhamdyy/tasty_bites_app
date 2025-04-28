@@ -1,3 +1,7 @@
+import 'package:json_annotation/json_annotation.dart';
+part 'recipe_model.g.dart';
+
+@JsonSerializable()
 class Recipe {
   final String name;
   final String imageUrl;
@@ -12,28 +16,17 @@ class Recipe {
     required this.ingredientsCount,
     required this.calories,
   });
-}
 
-final List<Recipe> getRecipes = [
-  Recipe(
-    name: "Classic Margherita Pizza",
-    imageUrl: "assets/images/pizza.webp",
-    rating: 4.6,
-    ingredientsCount: 6,
-    calories: 300,
-  ),
-  Recipe(
-    name: "Vegetarian Stir-Fry",
-    imageUrl: "assets/images/stir_fry.jpg",
-    rating: 4.7,
-    ingredientsCount: 9,
-    calories: 250,
-  ),
-  Recipe(
-    name: "Chocolate Chip Cookies",
-    imageUrl: "assets/images/cookies.jpg",
-    rating: 4.9,
-    ingredientsCount: 9,
-    calories: 150,
-  ),
-];
+  factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
+
+  static Recipe fromJsonWithDefaults(Map<String, dynamic> json) {
+    return Recipe(
+      name: json['name'] ?? 'Name not available',
+      imageUrl: json['image'] ?? '',
+      rating:
+          (json['rating'] != null) ? (json['rating'] as num).toDouble() : 0.0,
+    ingredientsCount: (json['ingredients'] as List<dynamic>?)?.length ?? 0,
+    calories: json['caloriesPerServing'] ?? 0,
+    );
+  }
+}

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:tasty_bites_app/models/recipe_model.dart';
 
 class RecipeWidget extends StatelessWidget {
-  final Recipe reciepe;
-  const RecipeWidget({super.key, required this.reciepe});
-
+  final Recipe recipe;
+  final Function()? onTap;
+  const RecipeWidget({super.key, required this.recipe,required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: onTap,
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         elevation: 5,
@@ -18,8 +18,8 @@ class RecipeWidget extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                reciepe.imageUrl,
+              child: Image.network(
+                recipe.imageUrl,
                 fit: BoxFit.cover,
                 width: double.infinity,
                 height: 250,
@@ -54,7 +54,7 @@ class RecipeWidget extends StatelessWidget {
                     Icon(Icons.star, color: Colors.yellow[400]),
                     SizedBox(width: 5),
                     Text(
-                      reciepe.rating.toString(),
+                      recipe.rating.toString(),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -72,7 +72,7 @@ class RecipeWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    reciepe.name,
+                    recipe.name,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -82,7 +82,7 @@ class RecipeWidget extends StatelessWidget {
                   ),
                   SizedBox(height: 5),
                   Text(
-                    "${reciepe.ingredientsCount} Ingredients",
+                    "${recipe.ingredientsCount} Ingredients",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -96,7 +96,7 @@ class RecipeWidget extends StatelessWidget {
               right: 20,
               bottom: 20,
               child: Text(
-                "${reciepe.calories} kcal",
+                "${recipe.calories} kcal",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,

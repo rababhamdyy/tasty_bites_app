@@ -1,9 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:tasty_bites_app/services/recipe_service.dart';
+import 'package:tasty_bites_app/views/recipe_detail_view.dart';
 import 'package:tasty_bites_app/widgets/recipe_widget.dart';
-import 'package:tasty_bites_app/models/recipe_model.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  List<dynamic> recipes = [];
+  @override
+  void initState() {
+    super.initState();
+    fetchRecipes();
+  }
+
+  Future<void> fetchRecipes() async {
+    recipes = await RecipeService().getRecipes();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +35,26 @@ class HomeView extends StatelessWidget {
         ),
       ),
 
-      body: ListView.builder(
-        itemCount: getRecipes.length,
-        itemBuilder: (context, index) {
-          return RecipeWidget(reciepe: getRecipes[index]);
-        },
-      ),
+      body:
+          recipes.isEmpty
+              ? Center(child: CircularProgressIndicator(color: Colors.lime))
+              : ListView.builder(
+                itemCount: recipes.length,
+                itemBuilder: (context, index) {
+                  return RecipeWidget(
+                    recipe: recipes[index],
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => RecipeDetailView(recipe: recipes[index]),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
     );
   }
 }
