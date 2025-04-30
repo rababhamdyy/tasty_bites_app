@@ -8,6 +8,7 @@ class RecipeDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Stack(
@@ -37,10 +38,129 @@ class RecipeDetailView extends StatelessWidget {
                   ),
                 ),
               ),
+              Positioned(
+                right: 25,
+                top: 340,
+                child: Row(
+                  children: [
+                    Icon(Icons.star, color: Colors.yellow[400]),
+                    SizedBox(width: 5),
+                    Text(
+                      recipe.rating.toString(),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                    Text(
+                      " | ${recipe.reviewCount} reviews",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
           Expanded(
-            child: Container(color: Colors.white, padding: EdgeInsets.all(20)),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Text(
+                    recipe.name,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontFamily: 'Poppins',
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 8,
+                    children: [
+                      Icon(
+                        Icons.room_service_outlined,
+                        color: Colors.grey[800],
+                        size: 16,
+                      ),
+                      Text(
+                        "${recipe.servings}",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Poppins',
+                          color: Colors.grey[800],
+                        ),
+                      ),
+                      Text(
+                        '|',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Poppins',
+                          color: Colors.grey[800],
+                        ),
+                      ),
+                      Icon(
+                        Icons.access_time,
+                        color: Colors.grey[800],
+                        size: 16,
+                      ),
+                      Text(
+                        "${recipe.cookTimeMinutes} min",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Poppins',
+                          color: Colors.grey[800],
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 8,
+                    children: [
+                      Icon(
+                        Icons.fastfood_outlined,
+                        color: Colors.grey[800],
+                        size: 16,
+                      ),
+                      Text(
+                        recipe.mealType.join(' , '),
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Poppins',
+                          color: Colors.grey[800],
+                        ),
+                      ),
+                      Text(
+                        '|',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Poppins',
+                          color: Colors.grey[800],
+                        ),
+                      ),
+                      Icon(Icons.restaurant, color: Colors.grey[800], size: 16),
+                      Text(
+                        recipe.cuisine,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Poppins',
+                          color: Colors.grey[800],
+                        ),
+                      ),
+                    ],
+                  ),
+                  
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -52,15 +172,14 @@ class WaveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     var path = Path();
-    path.lineTo(0, size.height * 0.8);
-
+    path.lineTo(0, size.height * 0.9);
     path.cubicTo(
       size.width * 0.2,
-      size.height,
-      size.width * 0.5,
-      size.height * 0.6,
-      size.width,
       size.height * 0.8,
+      size.width * 0.5,
+      size.height * 0.85,
+      size.width,
+      size.height * 0.7,
     );
     path.lineTo(size.width, 0);
     return path;

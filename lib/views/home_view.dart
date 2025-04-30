@@ -48,7 +48,8 @@ class _HomeViewState extends State<HomeView> {
                         context,
                         MaterialPageRoute(
                           builder:
-                              (context) => RecipeDetailView(recipe: recipes[index]),
+                              (context) =>
+                                  RecipeDetailView(recipe: recipes[index]),
                         ),
                       );
                     },
