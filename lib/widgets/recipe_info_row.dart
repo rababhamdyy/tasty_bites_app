@@ -22,7 +22,7 @@ class RecipeInfoRow extends StatelessWidget {
         Icon(firstIcon, size: 16, color: Colors.grey[800]),
         const SizedBox(width: 5),
         Text(firstText, style: _infoTextStyle),
-        const SizedBox(width: 15),
+        Text(' • ', style: _infoTextStyle),
         Icon(secondIcon, size: 16, color: Colors.grey[800]),
         const SizedBox(width: 5),
         Text(secondText, style: _infoTextStyle),
