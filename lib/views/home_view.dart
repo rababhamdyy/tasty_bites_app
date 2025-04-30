@@ -29,7 +29,8 @@ class _HomeViewState extends State<HomeView> {
       appBar: AppBar(
         title: Text("Tasty Bites"),
         centerTitle: true,
-        backgroundColor: Colors.lime,
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.blue[900],
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
         ),
@@ -37,7 +38,7 @@ class _HomeViewState extends State<HomeView> {
 
       body:
           recipes.isEmpty
-              ? Center(child: CircularProgressIndicator(color: Colors.lime))
+              ? Center(child: CircularProgressIndicator(color: Colors.blue[900]))
               : ListView.builder(
                 itemCount: recipes.length,
                 itemBuilder: (context, index) {

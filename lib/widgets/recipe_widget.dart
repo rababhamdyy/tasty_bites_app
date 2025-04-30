@@ -51,7 +51,7 @@ class RecipeWidget extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.star, color: Colors.yellow[400]),
+                    Icon(Icons.star, color: Colors.amber),
                     SizedBox(width: 5),
                     Text(
                       recipe.rating.toString(),

@@ -1,77 +1,107 @@
 import 'package:flutter/material.dart';
 import 'package:tasty_bites_app/models/recipe_model.dart';
 
-class RecipeDetailView extends StatelessWidget {
+class RecipeDetailView extends StatefulWidget {
   final Recipe recipe;
   const RecipeDetailView({super.key, required this.recipe});
+
+  @override
+  State<RecipeDetailView> createState() => _RecipeDetailViewState();
+}
+
+class _RecipeDetailViewState extends State<RecipeDetailView> {
+  int _selectedTab = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          Stack(
-            children: [
-              ClipPath(
-                clipper: WaveClipper(),
-                child: Image.network(
-                  recipe.imageUrl,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: 400,
-                ),
-              ),
-              Positioned(
-                top: 30,
-                left: 20,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.lime,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back, color: Colors.white, size: 25),
-                    onPressed: () {
-                      Navigator.pop(context);
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                ClipPath(
+                  clipper: WaveClipper(),
+                  child: Image.network(
+                    widget.recipe.imageUrl,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: 400,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Container(
+                        height: 400,
+                        color: Colors.grey[200],
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.blue[900],
+                          ),
+                        ),
+                      );
                     },
                   ),
                 ),
-              ),
-              Positioned(
-                right: 25,
-                top: 340,
-                child: Row(
-                  children: [
-                    Icon(Icons.star, color: Colors.yellow[400]),
-                    SizedBox(width: 5),
-                    Text(
-                      recipe.rating.toString(),
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'Poppins',
-                      ),
+                Positioned(
+                  top: 40,
+                  left: 20,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.blue[900],
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    Text(
-                      " | ${recipe.reviewCount} reviews",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'Poppins',
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                        size: 25,
                       ),
+                      onPressed: () => Navigator.pop(context),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Expanded(
-            child: SingleChildScrollView(
+                Positioned(
+                  top: 340,
+                  right: 20,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withAlpha(220),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(color: Colors.black12, blurRadius: 8),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.star, color: Colors.amber, size: 20),
+                        SizedBox(width: 5),
+                        Text(
+                          widget.recipe.rating.toString(),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          " | ${widget.recipe.reviewCount} reviews",
+                          style: TextStyle(fontSize: 16, fontFamily: 'Poppins'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.all(20),
               child: Column(
                 children: [
                   Text(
-                    recipe.name,
+                    widget.recipe.name,
                     style: TextStyle(
                       fontSize: 20,
                       fontFamily: 'Poppins',
@@ -80,87 +110,190 @@ class RecipeDetailView extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 8,
-                    children: [
-                      Icon(
-                        Icons.room_service_outlined,
-                        color: Colors.grey[800],
-                        size: 16,
-                      ),
-                      Text(
-                        "${recipe.servings}",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: 'Poppins',
-                          color: Colors.grey[800],
-                        ),
-                      ),
-                      Text(
-                        '|',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: 'Poppins',
-                          color: Colors.grey[800],
-                        ),
-                      ),
-                      Icon(
-                        Icons.access_time,
-                        color: Colors.grey[800],
-                        size: 16,
-                      ),
-                      Text(
-                        "${recipe.cookTimeMinutes} min",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: 'Poppins',
-                          color: Colors.grey[800],
-                        ),
-                      ),
-                    ],
+                  _buildInfoRow(
+                    Icons.room_service_outlined,
+                    "${widget.recipe.servings} servings",
+                    Icons.access_time,
+                    "${widget.recipe.cookTimeMinutes} min",
                   ),
                   SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 8,
+                  _buildInfoRow(
+                    Icons.fastfood_outlined,
+                    widget.recipe.mealType.join(', '),
+                    Icons.restaurant,
+                    widget.recipe.cuisine,
+                  ),
+                  SizedBox(height: 20),
+                  ToggleButtons(
+                    isSelected: [_selectedTab == 0, _selectedTab == 1],
+                    onPressed: (int index) {
+                      setState(() {
+                        _selectedTab = index;
+                      });
+                    },
+                    borderRadius: BorderRadius.circular(8),
+                    fillColor: Colors.blue[900],
+                    selectedColor: Colors.white,
+                    textStyle: TextStyle(fontSize: 16, fontFamily: 'Poppins'),
+                    constraints: BoxConstraints(
+                      minHeight: 40,
+                      minWidth: MediaQuery.of(context).size.width * 0.35,
+                    ),
                     children: [
-                      Icon(
-                        Icons.fastfood_outlined,
-                        color: Colors.grey[800],
-                        size: 16,
-                      ),
-                      Text(
-                        recipe.mealType.join(' , '),
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: 'Poppins',
-                          color: Colors.grey[800],
-                        ),
-                      ),
-                      Text(
-                        '|',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: 'Poppins',
-                          color: Colors.grey[800],
-                        ),
-                      ),
-                      Icon(Icons.restaurant, color: Colors.grey[800], size: 16),
-                      Text(
-                        recipe.cuisine,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: 'Poppins',
-                          color: Colors.grey[800],
-                        ),
-                      ),
+                      _buildToggleButtonChild('Ingredients'),
+                      _buildToggleButtonChild('Instructions'),
                     ],
                   ),
-                  
+                  SizedBox(height: 20),
+                  _selectedTab == 0
+                      ? _buildIngredients(widget.recipe)
+                      : _buildInstructions(widget.recipe),
                 ],
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(
+    IconData firstIcon,
+    String firstText,
+    IconData secondIcon,
+    String secondText,
+  ) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(firstIcon, size: 16, color: Colors.grey[800]),
+        SizedBox(width: 5),
+        Text(firstText, style: _infoTextStyle),
+        SizedBox(width: 15),
+        Icon(secondIcon, size: 16, color: Colors.grey[800]),
+        SizedBox(width: 5),
+        Text(secondText, style: _infoTextStyle),
+      ],
+    );
+  }
+
+  Widget _buildToggleButtonChild(String text) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: Text(text),
+    );
+  }
+
+  final TextStyle _infoTextStyle = TextStyle(
+    fontSize: 14,
+    fontFamily: 'Poppins',
+    color: Colors.grey[800],
+  );
+
+  Widget _buildIngredients(Recipe recipe) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.grey[50],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Ingredients:',
+            style: TextStyle(
+              fontSize: 18,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: recipe.ingredients.length,
+            itemBuilder:
+                (context, index) => Padding(
+                  padding: EdgeInsets.symmetric(vertical: 6),
+                  child: Row(
+                    children: [
+                      Icon(Icons.circle, size: 10, color: Colors.blue[900]),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          recipe.ingredients[index],
+                          style: TextStyle(fontSize: 20, fontFamily: 'Poppins'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInstructions(Recipe recipe) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.grey[50],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Instructions:',
+            style: TextStyle(
+              fontSize: 18,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: recipe.instructions.length,
+            itemBuilder:
+                (context, index) => Padding(
+                  padding: EdgeInsets.only(bottom: 16),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 24,
+                        height: 24,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.blue[900],
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          '${index + 1}',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          recipe.instructions[index],
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Poppins',
+                            height: 1.5,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
           ),
         ],
       ),
@@ -171,7 +304,7 @@ class RecipeDetailView extends StatelessWidget {
 class WaveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
-    var path = Path();
+    final path = Path();
     path.lineTo(0, size.height * 0.9);
     path.cubicTo(
       size.width * 0.2,
@@ -182,6 +315,7 @@ class WaveClipper extends CustomClipper<Path> {
       size.height * 0.7,
     );
     path.lineTo(size.width, 0);
+    path.close();
     return path;
   }
 
