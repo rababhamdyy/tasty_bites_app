@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tasty_bites_app/views/home_view.dart';
+import 'package:tasty_bites_app/views/splash_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Tasty Bites',
-      home: HomeView(),
+      home: SplashView(),
     );
   }
 }
