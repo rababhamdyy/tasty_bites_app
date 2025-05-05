@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 
 class RecipeClassification extends StatelessWidget {
   final List<String> recipeClassification = ['Easy', 'Medium', 'All'];
-  final Function(String)
-  onCategorySelected; 
+  final Function(String) onCategorySelected;
+  final String selectedCategory;
 
-  RecipeClassification({super.key, required this.onCategorySelected});
+  RecipeClassification({
+    super.key,
+    required this.onCategorySelected,
+    required this.selectedCategory,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +19,7 @@ class RecipeClassification extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children:
             recipeClassification.map((category) {
+              bool isSelected = category == selectedCategory;
               return GestureDetector(
                 onTap: () {
                   onCategorySelected(
@@ -27,14 +32,14 @@ class RecipeClassification extends StatelessWidget {
                     width: 100,
                     height: 50,
                     decoration: BoxDecoration(
-                      color: Colors.black12,
+                      color: isSelected ? Colors.blue[900] : Colors.black12,
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Center(
                       child: Text(
                         category,
                         style: TextStyle(
-                          color: Colors.blue[900],
+                          color: isSelected ? Colors.white : Colors.blue[900],
                           fontSize: 18,
                           fontFamily: 'Poppins',
                         ),

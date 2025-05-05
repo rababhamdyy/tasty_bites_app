@@ -48,6 +48,7 @@ class _HomeViewState extends State<HomeView> {
               : Column(
                 children: [
                   RecipeClassification(
+                    selectedCategory: selectedDifficulty,
                     onCategorySelected: (difficulty) {
                       setState(() {
                         selectedDifficulty = difficulty;
