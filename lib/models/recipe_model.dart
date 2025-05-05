@@ -15,7 +15,7 @@ class Recipe {
   final int servings;
   final List<String> ingredients;
   final List<String> instructions;
-  
+  final String difficulty;
 
   Recipe({
     required this.name,
@@ -30,6 +30,7 @@ class Recipe {
     required this.servings,
     required this.ingredients,
     required this.instructions,
+    required this.difficulty
   });
 
   factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
@@ -51,14 +52,17 @@ class Recipe {
       cuisine: json['cuisine'] ?? 'Cuisine not available',
       cookTimeMinutes: json['cookTimeMinutes'] ?? 0,
       servings: json['servings'] ?? 0,
-      ingredients: (json['ingredients'] as List<dynamic>?)
+      ingredients:
+          (json['ingredients'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
           [],
-      instructions: (json['instructions'] as List<dynamic>?)
+      instructions:
+          (json['instructions'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
           [],
+      difficulty: json['difficulty'] ?? 'Null',
     );
   }
 }

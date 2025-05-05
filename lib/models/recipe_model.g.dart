@@ -19,6 +19,7 @@ Recipe _$RecipeFromJson(Map<String, dynamic> json) => Recipe(
   servings: json['servings'] as int,
   ingredients: json['ingredients'] as List<String>,
   instructions: json['instructions'] as List<String>,
+  difficulty: json['difficulty'] as String,
 );
 
 // Map<String, dynamic> _$RecipeToJson(Recipe instance) => <String, dynamic>{

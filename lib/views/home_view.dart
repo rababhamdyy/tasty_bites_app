@@ -13,6 +13,8 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   List<dynamic> recipes = [];
+  String selectedDifficulty = 'All';
+
   @override
   void initState() {
     super.initState();
@@ -20,9 +22,10 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Future<void> fetchRecipes() async {
-    recipes = await RecipeService().getRecipes();
+    recipes = await RecipeService().getRecipes(selectedDifficulty);
     setState(() {});
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +46,14 @@ class _HomeViewState extends State<HomeView> {
               )
               : Column(
                 children: [
-                  RecipeClassification(),
+                  RecipeClassification(
+                    onCategorySelected: (difficulty) {
+                      setState(() {
+                        selectedDifficulty = difficulty;
+                        fetchRecipes(); // Fetch recipes based on selected difficulty
+                      });
+                    },
+                  ),
                   Expanded(
                     child: ListView.builder(
                       itemCount: recipes.length,

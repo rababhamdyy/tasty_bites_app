@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 class RecipeClassification extends StatelessWidget {
   final List<String> recipeClassification = ['Easy', 'Medium', 'All'];
+  final Function(String)
+  onCategorySelected; 
 
-  RecipeClassification({super.key});
+  RecipeClassification({super.key, required this.onCategorySelected});
 
   @override
   Widget build(BuildContext context) {
@@ -11,29 +13,37 @@ class RecipeClassification extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: recipeClassification.map((category) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Container(
-              width: 100,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.black12,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Center(
-                child: Text(
-                  category, 
-                  style: TextStyle(
-                    color: Colors.blue[900],
-                    fontSize: 18,
-                    fontFamily: 'Poppins',
+        children:
+            recipeClassification.map((category) {
+              return GestureDetector(
+                onTap: () {
+                  onCategorySelected(
+                    category,
+                  ); // Call the callback when a category is selected
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Container(
+                    width: 100,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.black12,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Center(
+                      child: Text(
+                        category,
+                        style: TextStyle(
+                          color: Colors.blue[900],
+                          fontSize: 18,
+                          fontFamily: 'Poppins',
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-          );
-        }).toList(),
+              );
+            }).toList(),
       ),
     );
   }
