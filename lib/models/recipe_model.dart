@@ -15,6 +15,7 @@ class Recipe {
   final int servings;
   final List<String> ingredients;
   final List<String> instructions;
+  
 
   Recipe({
     required this.name,

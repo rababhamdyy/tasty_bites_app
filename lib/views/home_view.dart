@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tasty_bites_app/services/recipe_service.dart';
 import 'package:tasty_bites_app/views/recipe_detail_view.dart';
+import 'package:tasty_bites_app/widgets/recipe_classification.dart';
 import 'package:tasty_bites_app/widgets/recipe_widget.dart';
 
 class HomeView extends StatefulWidget {
@@ -22,7 +23,6 @@ class _HomeViewState extends State<HomeView> {
     recipes = await RecipeService().getRecipes();
     setState(() {});
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,24 +38,34 @@ class _HomeViewState extends State<HomeView> {
 
       body:
           recipes.isEmpty
-              ? Center(child: CircularProgressIndicator(color: Colors.blue[900]))
-              : ListView.builder(
-                itemCount: recipes.length,
-                itemBuilder: (context, index) {
-                  return RecipeWidget(
-                    recipe: recipes[index],
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder:
-                              (context) =>
-                                  RecipeDetailView(recipe: recipes[index]),
-                        ),
-                      );
-                    },
-                  );
-                },
+              ? Center(
+                child: CircularProgressIndicator(color: Colors.blue[900]),
+              )
+              : Column(
+                children: [
+                  RecipeClassification(),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: recipes.length,
+                      itemBuilder: (context, index) {
+                        return RecipeWidget(
+                          recipe: recipes[index],
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => RecipeDetailView(
+                                      recipe: recipes[index],
+                                    ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
     );
   }
