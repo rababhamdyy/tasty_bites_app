@@ -14,6 +14,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   List<dynamic> recipes = [];
   String selectedDifficulty = 'All';
+   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -51,11 +52,13 @@ class _HomeViewState extends State<HomeView> {
                       setState(() {
                         selectedDifficulty = difficulty;
                         fetchRecipes(); // Fetch recipes based on selected difficulty
+                        _scrollController.jumpTo(0);  
                       });
                     },
                   ),
                   Expanded(
                     child: ListView.builder(
+                      controller: _scrollController,
                       itemCount: recipes.length,
                       itemBuilder: (context, index) {
                         return RecipeWidget(
