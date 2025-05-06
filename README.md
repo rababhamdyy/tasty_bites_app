@@ -1,16 +1,49 @@
-# tasty_bites_app
+# Tasty Bites 🍽️
 
-A new Flutter project.
+Tasty Bites is a Flutter mobile application that helps users explore a variety of delicious recipes filtered by difficulty level (Easy, Medium, All). Each recipe includes detailed information such as ingredients, step-by-step instructions, cooking time, meal type, cuisine, and more.
 
-## Getting Started
+<p align="center">
+  <img src="assets/Tasty_Bites.png" alt="App Logo" width="350"/>
+</p>
 
-This project is a starting point for a Flutter application.
+## 🔧 Built With
 
-A few resources to get you started if this is your first Flutter project:
+- **Flutter**
+- **Cubit (Bloc for state management)**
+- **Public Recipe API**
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## ✨ Features
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Splash screen animation on app launch
+- Browse recipes filtered by difficulty (Easy, Medium, All)
+- View full recipe details:
+  - Ingredients list
+  - Step-by-step instructions
+  - Cooking time
+  - Cuisine type
+  - Meal type (e.g., breakfast, lunch)
+- Smooth and responsive UI using Flutter
+- Built using Cubit for efficient state management
+
+## 📸 App Preview
+
+<p align="center">
+  <img src="assets/App.png" alt="Splash Screen" width="800"/>
+</p>
+
+## 📁 Project Structure Highlights
+
+- `cubits/recipe_cubit.dart` – Manages recipe fetching logic and state
+- `models/recipe_model.dart` – Data model for the recipe
+- `views/` – UI screens (HomeView, SplashView, RecipeDetailView)
+- `widgets/` – Reusable UI components like RecipeCard, Classification Tabs, InfoRow, etc.
+
+## 📦 Getting Started
+
+To run the project locally:
+
+```bash
+git clone https://github.com/rababhamdyy/tasty_bites_app.git
+cd tasty_bites_app
+flutter pub get
+flutter run
