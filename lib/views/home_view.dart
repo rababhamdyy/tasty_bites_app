@@ -1,76 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:tasty_bites_app/services/recipe_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tasty_bites_app/cubits/recipe_cubit.dart';
+import 'package:tasty_bites_app/cubits/recipe_state.dart';
 import 'package:tasty_bites_app/views/recipe_detail_view.dart';
 import 'package:tasty_bites_app/widgets/recipe_classification.dart';
 import 'package:tasty_bites_app/widgets/recipe_widget.dart';
 
-class HomeView extends StatefulWidget {
-  const HomeView({super.key});
-
-  @override
-  State<HomeView> createState() => _HomeViewState();
-}
-
-class _HomeViewState extends State<HomeView> {
-  List<dynamic> recipes = [];
-  String selectedDifficulty = 'All';
-   final ScrollController _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    fetchRecipes();
-  }
-
-  Future<void> fetchRecipes() async {
-    recipes = await RecipeService().getRecipes(selectedDifficulty);
-    setState(() {});
-  }
+class HomeView extends StatelessWidget {
+  final ScrollController _scrollController = ScrollController();
+  HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Tasty Bites"),
+        title: const Text("Tasty Bites"),
         centerTitle: true,
         foregroundColor: Colors.white,
         backgroundColor: Colors.blue[900],
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
         ),
       ),
-
-      body:
-          recipes.isEmpty
-              ? Center(
-                child: CircularProgressIndicator(color: Colors.blue[900]),
-              )
-              : Column(
-                children: [
-                  RecipeClassification(
-                    selectedCategory: selectedDifficulty,
-                    onCategorySelected: (difficulty) {
-                      setState(() {
-                        selectedDifficulty = difficulty;
-                        fetchRecipes(); // Fetch recipes based on selected difficulty
-                        _scrollController.jumpTo(0);  
-                      });
+      body: BlocBuilder<RecipeCubit, RecipeState>(
+        builder: (context, state) {
+          if (state is RecipeLoading) {
+            return Center(
+              child: CircularProgressIndicator(color: Colors.blue[900]),
+            );
+          } else if (state is RecipeLoaded) {
+            return Column(
+              children: [
+                RecipeClassification(
+                  selectedCategory: state.selectedDifficulty,
+                  onCategorySelected: (difficulty) {
+                    context.read<RecipeCubit>().getRecipes(difficulty);
+                    _scrollController.jumpTo(0);
+                  },
+                ),
+                Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      await context.read<RecipeCubit>().loadInitialData();
                     },
-                  ),
-                  Expanded(
                     child: ListView.builder(
                       controller: _scrollController,
-                      itemCount: recipes.length,
+                      itemCount: state.recipes.length,
                       itemBuilder: (context, index) {
                         return RecipeWidget(
-                          recipe: recipes[index],
+                          recipe: state.recipes[index],
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder:
                                     (context) => RecipeDetailView(
-                                      recipe: recipes[index],
+                                      recipe: state.recipes[index],
                                     ),
                               ),
                             );
@@ -79,8 +64,25 @@ class _HomeViewState extends State<HomeView> {
                       },
                     ),
                   ),
-                ],
+                ),
+              ],
+            );
+          } else if (state is RecipeError) {
+            return Center(child: Text(state.message));
+          } else {
+            return Center(
+              child: Text(
+                'No Recipe Found',
+                style: TextStyle(
+                  color: Colors.blue[900],
+                  fontSize: 20,
+                  fontFamily: 'Poppins',
+                ),
               ),
+            );
+          }
+        },
+      ),
     );
   }
 }
